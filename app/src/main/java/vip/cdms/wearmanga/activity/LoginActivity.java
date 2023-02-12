@@ -208,12 +208,12 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString("DedeUserID__ckMd5", DedeUserID__ckMd5);
                                 editor.putString("SESSDATA", SESSDATA);
                                 editor.putString("bili_jct", bili_jct);
-                                editor.apply();
 
-                                listenerThread.interrupt();
-                                finish();
-
-                                ActivityUtils.restartApp(LoginActivity.this);
+                                if (editor.commit()) {
+                                    listenerThread.interrupt();
+                                    finish();
+                                    ActivityUtils.restartApp(LoginActivity.this);
+                                } else ActivityUtils.alert(LoginActivity.this, null, "commit failed");
                             }
                         });
                     }

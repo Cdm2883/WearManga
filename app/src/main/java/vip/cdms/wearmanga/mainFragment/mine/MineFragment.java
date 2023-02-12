@@ -116,9 +116,10 @@ public class MineFragment extends Fragment {
                 editor.putString("DedeUserID__ckMd5", "");
                 editor.putString("SESSDATA", "");
                 editor.putString("bili_jct", "");
-                editor.apply();
+                if (editor.commit()) {
+                    ActivityUtils.restartApp(requireActivity());
+                } else ActivityUtils.alert(requireActivity(), null, "commit failed");
 
-                ActivityUtils.restartApp(requireActivity());
                 break;
         }
         return super.onOptionsItemSelected(item);

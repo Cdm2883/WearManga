@@ -7,26 +7,24 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.alibaba.fastjson.JSONObject;
-import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import org.jetbrains.annotations.NotNull;
 import vip.cdms.wearmanga.R;
-import vip.cdms.wearmanga.utils.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * 章节列表 - 适配器
+ */
 public class ChaptersListAdapter extends RecyclerView.Adapter<ChaptersListAdapter.ViewHolder> {
     private final RecyclerView recyclerView;
     private final ItemOnClick itemOnClick;
@@ -34,7 +32,7 @@ public class ChaptersListAdapter extends RecyclerView.Adapter<ChaptersListAdapte
     private final ArrayList<JSONObject> localDataSet = new ArrayList<>();
     private int read_epid = -2;
 
-    private HashMap<Integer ,Float> posYs = new HashMap<>();
+    private final HashMap<Integer ,Float> posYs = new HashMap<>();
 
     public interface ItemOnClick {
         void onClick(JSONObject jsonObject);
@@ -189,6 +187,8 @@ public class ChaptersListAdapter extends RecyclerView.Adapter<ChaptersListAdapte
             imageView.setVisibility(View.GONE);
             materialButton.setVisibility(View.GONE);
         }
+
+        viewHolder.getCard().setOnClickListener(v -> itemOnClick.onClick(jsonObject));
 
         View view = viewHolder.getView();
         view.post(() -> posYs.put(position, view.getY()));

@@ -12,39 +12,52 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Bili认证Cookie
+ */
 public class BiliCookieJar implements CookieJar {
     private final Context context;
 
+    public final String DedeUserID;
+    public final String DedeUserID__ckMd5;
+    public final String SESSDATA;
+    public final String bili_jct;
+
     public BiliCookieJar(Context context) {
         this.context = context;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("bili", MODE_PRIVATE);
+        DedeUserID = sharedPreferences.getString("DedeUserID", "");
+        DedeUserID__ckMd5 = sharedPreferences.getString("DedeUserID__ckMd5", "");
+        SESSDATA = sharedPreferences.getString("SESSDATA", "");
+        bili_jct = sharedPreferences.getString("bili_jct", "");
     }
 
     @NotNull
     @Override
     public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("bili", MODE_PRIVATE);
         return new ArrayList<Cookie>(){{
             add(new Cookie.Builder()
                     .name("DedeUserID")
-                    .value(sharedPreferences.getString("DedeUserID", ""))
+                    .value(DedeUserID)
                     .domain("bilibili.com")
                     .path("/")
                     .build());
             add(new Cookie.Builder()
                     .name("DedeUserID__ckMd5")
-                    .value(sharedPreferences.getString("DedeUserID__ckMd5", ""))
+                    .value(DedeUserID__ckMd5)
                     .domain("bilibili.com")
                     .path("/")
                     .build());
             add(new Cookie.Builder()
                     .name("SESSDATA")
-                    .value(sharedPreferences.getString("SESSDATA", ""))
+                    .value(SESSDATA)
                     .domain("bilibili.com")
                     .path("/")
                     .build());
             add(new Cookie.Builder()
                     .name("bili_jct")
-                    .value(sharedPreferences.getString("bili_jct", ""))
+                    .value(bili_jct)
                     .domain("bilibili.com")
                     .path("/")
                     .build());

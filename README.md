@@ -5,10 +5,11 @@
 ![Latest Tag](https://img.shields.io/github/v/tag/Cdm2883/WearManga?label=LATEST%20TAG&style=for-the-badge)
 ![GitHub Releases (by Asset)](https://img.shields.io/github/downloads/Cdm2883/WearManga/latest/total?style=for-the-badge)
 ](https://github.com/Cdm2883/WearManga/releases/latest)  
-一个为手表 *(Android, WearOS)* 定制的Material风格, B漫第三方客户端
+> 一个为手表 *(Android, WearOS)* 定制的Material风格, B漫第三方客户端
 
 ## ✅ 公测
-当前项目处于公测阶段, 如有发现问题, 欢迎issues!  
+当前项目处于**公测**阶段, 如有发现问题, 欢迎[issues](https://github.com/Cdm2883/WearManga/issues)!  
+安装包在项目的这个位置 -> [app/release/app-release.apk](app/release/app-release.apk) *(正式版再发release)*  
 QQ交流群: 945535472 (加群群备注来源)
 
 ## 🎈 声明 & 开源

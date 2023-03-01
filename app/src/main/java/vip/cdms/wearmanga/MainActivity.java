@@ -9,35 +9,30 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import com.alibaba.fastjson.JSONObject;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
+import com.alibaba.fastjson.JSONObject;
+import com.google.android.material.navigation.NavigationView;
 import vip.cdms.wearmanga.api.API;
 import vip.cdms.wearmanga.api.BiliAPIError;
 import vip.cdms.wearmanga.api.UserAPI;
+import vip.cdms.wearmanga.databinding.ActivityMainBinding;
 import vip.cdms.wearmanga.utils.ActivityUtils;
 import vip.cdms.wearmanga.utils.BiliCookieJar;
-import vip.cdms.wearmanga.utils.SnackbarMaker;
-import vip.cdms.wearmanga.databinding.ActivityMainBinding;
+import vip.cdms.wearmanga.utils.TimeUtils;
 
 import java.lang.reflect.Method;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     public ActivityMainBinding binding;
 
-    private View navHeader;
+    //    private View navHeader;
     private TextView drawerHeaderTitle;
     private TextView drawerHeaderSubtitle;
 
@@ -48,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarMain.bottomAppBar);
-        navHeader = binding.navView.inflateHeaderView(R.layout.nav_header_main);
+        View navHeader = binding.navView.inflateHeaderView(R.layout.nav_header_main);
         drawerHeaderTitle = navHeader.findViewById(R.id.drawerHeaderTitle);
         drawerHeaderSubtitle = navHeader.findViewById(R.id.drawerHeaderSubtitle);
 
@@ -77,9 +72,10 @@ public class MainActivity extends AppCompatActivity {
                     if (code == -101) runOnUiThread(() -> {
                             drawerHeaderTitle.setText("你还没有登录");
                             drawerHeaderSubtitle.setText("登录获取更多功能~ (点击\"我的\"进行扫码登录)");
-                    }); else ActivityUtils.alert(MainActivity.this, null, e.toString());
-                } else ActivityUtils.alert(MainActivity.this, null, e.toString());
+                    }); else ActivityUtils.alert(MainActivity.this, e);
+                } else ActivityUtils.alert(MainActivity.this, e);
             }
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(JSONObject json_root_data) {
                 runOnUiThread(() -> {
@@ -107,19 +103,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
 
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(() -> {
-                    if (onRestartFabShow) binding.appBarMain.fab.show();
-                    if (onRestartAppbarShow) binding.appBarMain.bottomAppBar.performShow();
+        TimeUtils.setTimeout(() -> runOnUiThread(() -> {
+            if (onRestartFabShow) binding.appBarMain.fab.show();
+            if (onRestartAppbarShow) binding.appBarMain.bottomAppBar.performShow();
 
-                    onRestartFabShow = false;
-                    onRestartAppbarShow = false;
-                });
-                cancel();
-            }
-        }, 700);
+            onRestartFabShow = false;
+            onRestartAppbarShow = false;
+        }), 700);
     }
 
     @Override
@@ -136,17 +126,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         // 通过反射使其图标可见
-        if (menu != null) {
-            if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
-                try {
-                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-                    method.setAccessible(true);
-                    method.invoke(menu, true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//        if (menu != null) {
+        if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
+            try {
+                Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                method.setAccessible(true);
+                method.invoke(menu, true);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+//        }
         return super.onMenuOpened(featureId, menu);
     }
 

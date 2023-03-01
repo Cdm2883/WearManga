@@ -1,13 +1,9 @@
 package vip.cdms.wearmanga.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.util.DisplayMetrics;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import vip.cdms.wearmanga.api.BiliAPIError;
 
 public class ActivityUtils {
     public static void alert(Activity activity, CharSequence title, CharSequence message) {
@@ -17,6 +13,13 @@ public class ActivityUtils {
             if (message != null) materialAlertDialogBuilder.setMessage(message);
             materialAlertDialogBuilder.show();
         });
+    }
+    public static void alert(Activity activity, Exception exception) {
+        if (exception instanceof BiliAPIError) {
+            BiliAPIError biliAPIError = (BiliAPIError) exception;
+            alert(activity, "CODE: " + biliAPIError.getCode(), biliAPIError.getMessage());
+        } else alert(activity, null, exception.toString());
+        exception.printStackTrace();
     }
 
     public static void restartApp(Activity activity) {

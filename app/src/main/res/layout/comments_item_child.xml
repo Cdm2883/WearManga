@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:longClickable="true"
+        android:focusable="true">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:paddingStart="40dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="4dp"
+            tools:ignore="UselessParent">
+
+        <!-- 头像 -->
+        <vip.cdms.wearmanga.ui.CircleImageView
+                android:id="@+id/avatar"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher"/>
+
+        <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/avatar">
+            <!-- 用户名 -->
+            <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:gravity="start|center"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textStyle="bold"
+                    android:textSize="8sp"
+                    tools:ignore="SmallSp"/>
+<!--            android:text="探索者USO:"-->
+            <!-- 评论内容 -->
+            <TextView
+                    android:id="@+id/content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|center"
+                    android:minHeight="16dp"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="8sp"
+                    tools:ignore="SmallSp"/>
+<!--            android:text="哈哈哈"-->
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:orientation="horizontal"
+                android:layout_below="@id/chipGroup"
+                android:layout_alignStart="@id/chipGroup"
+                android:layout_alignEnd="@id/chipGroup">
+            <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="12dp"
+                    android:gravity="start|center"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="?android:textColorTertiary"
+                    android:textSize="8sp"
+                    tools:ignore="SmallSp"/>
+<!--            android:text="刚刚"-->
+
+            <LinearLayout
+                    android:id="@+id/like_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+                <ImageView
+                        android:id="@+id/like_icon"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_margin="1dp"
+                        android:src="@drawable/outline_thumb_up_24"
+                        tools:ignore="ContentDescription"/>
+                <TextView
+                        android:id="@+id/like_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="12dp"
+                        android:gravity="start|center"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="8.5sp"
+                        tools:ignore="SmallSp"/>
+<!--                android:text="114"-->
+            </LinearLayout>
+        </com.google.android.material.chip.ChipGroup>
+
+    </RelativeLayout>
+
+</LinearLayout>

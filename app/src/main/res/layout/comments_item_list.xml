@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:longClickable="true"
+        android:focusable="true">
+
+    <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerInsetStart="40dp"
+            app:dividerInsetEnd="0dp"/>
+
+    <RelativeLayout
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="0dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+        <!-- 头像 -->
+        <vip.cdms.wearmanga.ui.CircleImageView
+                android:id="@+id/avatar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher"/>
+
+        <!-- 点赞 -->
+        <LinearLayout
+                android:id="@+id/like_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="2dp"
+                tools:ignore="UseCompoundDrawables">
+            <ImageView
+                    android:id="@+id/like_icon"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/outline_thumb_up_24"
+                    tools:ignore="ContentDescription"/>
+            <TextView
+                    android:id="@+id/like_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="?android:textColorTertiary"
+                    android:textSize="7sp"
+                    tools:ignore="SmallSp"/>
+<!--            android:text="114"-->
+        </LinearLayout>
+
+        <!-- 用户名 -->
+        <TextView
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_toStartOf="@id/like_layout"
+                android:layout_toEndOf="@id/avatar"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textStyle="bold"
+                android:textSize="11sp"/>
+<!--        android:text="eeeeee"-->
+
+        <!-- 评论内容 -->
+        <TextView
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_name"
+                android:layout_alignStart="@id/user_name"
+                android:layout_alignEnd="@id/user_name"
+                android:layout_marginTop="4dp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
+<!--        android:text="龙之九子之嘲风 嘲风是龙的第三子龙和一只神鸟所生的平生好险又好望形态似走兽肉搏能力极其强悍可以威慑妖魔单挑数只妖兽都不落下风象征吉祥、美观和威严"-->
+
+        <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorTertiary"
+                android:textSize="8sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_below="@id/content"
+                android:layout_alignStart="@id/content"
+                android:layout_alignEnd="@id/content"
+                tools:ignore="SmallSp"/>
+<!--        android:text="刚刚"-->
+    </RelativeLayout>
+
+</LinearLayout>

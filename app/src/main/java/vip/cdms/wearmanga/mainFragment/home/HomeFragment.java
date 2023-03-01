@@ -2,7 +2,6 @@ package vip.cdms.wearmanga.mainFragment.home;
 
 import android.os.Bundle;
 import android.view.*;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +24,6 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     private boolean isRefreshing = false;
-    private RecyclerView recyclerView;
     private MangaListAdapter mangaListAdapter;
 
     /* fragment的控件还没有加到activity中 */
@@ -46,7 +44,7 @@ public class HomeFragment extends Fragment {
         binding.swipeRefresh.setOnRefreshListener(this::refresh);
 
         // 配置RecyclerView
-        recyclerView = binding.recyclerView;
+        RecyclerView recyclerView = binding.recyclerView;
         mangaListAdapter = new MangaListAdapter(recyclerView);
         mangaListAdapter.setLayoutVertical();
         mangaListAdapter.setItemDecoration(new MangaListAdapter.ItemDecoration(requireActivity()));
@@ -105,6 +103,14 @@ public class HomeFragment extends Fragment {
         requireActivity().runOnUiThread(() -> {
             binding.swipeRefresh.setRefreshing(true);
             mangaListAdapter.clearDataItems();
+
+            // todo 调试用item, 记得删除
+            mangaListAdapter.addDataItem(new MangaListAdapter.DataItemNormal(
+                    "https://i0.hdslb.com/bfs/manga-static/6b5ab1a7cb883504db182ee46381835e70d6d460.jpg",
+                    "有兽焉",
+                    "靴下猫腰子, 分子互动"
+            ).setOnClickListener(view -> MangaInfoActivity.startActivity(requireActivity(), view, 29329)));
+
             loadHomeRecommend();
         });
     }

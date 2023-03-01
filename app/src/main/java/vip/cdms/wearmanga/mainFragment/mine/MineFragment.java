@@ -1,10 +1,10 @@
 package vip.cdms.wearmanga.mainFragment.mine;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.*;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.alibaba.fastjson.JSONObject;
@@ -15,7 +15,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.jetbrains.annotations.NotNull;
-import vip.cdms.wearmanga.MainActivity;
 import vip.cdms.wearmanga.R;
 import vip.cdms.wearmanga.activity.LoginActivity;
 import vip.cdms.wearmanga.api.API;
@@ -56,9 +55,10 @@ public class MineFragment extends Fragment {
                         binding.subtitle.setText("点击卡片进行登录");
                         binding.card.setOnClickListener(view -> requireActivity().startActivity(new Intent(requireActivity(), LoginActivity.class)));
                         requireActivity().startActivity(new Intent(requireActivity(), LoginActivity.class));
-                    }); else ActivityUtils.alert(requireActivity(), null, e.toString());
-                } else ActivityUtils.alert(requireActivity(), null, e.toString());
+                    }); else ActivityUtils.alert(requireActivity(), e);
+                } else ActivityUtils.alert(requireActivity(), e);
             }
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(JSONObject json_root_data) {
                 requireActivity().runOnUiThread(() -> {
@@ -87,7 +87,7 @@ public class MineFragment extends Fragment {
 
         // 配置appbar
         View appbarMain = requireActivity().findViewById(R.id.app_bar_main);
-        BottomAppBar bottomAppBar = appbarMain.findViewById(R.id.bottomAppBar);
+//        BottomAppBar bottomAppBar = appbarMain.findViewById(R.id.bottomAppBar);
 //        TextView textView = bottomAppBar.findViewById(R.id.title);
         FloatingActionButton floatingActionButton = appbarMain.findViewById(R.id.fab);
 

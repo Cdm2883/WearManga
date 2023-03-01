@@ -1,10 +1,12 @@
 package vip.cdms.wearmanga.api;
 
+import android.app.Activity;
 import com.alibaba.fastjson.JSONObject;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
+import vip.cdms.wearmanga.utils.ActivityUtils;
 
 import java.io.IOException;
 
@@ -13,6 +15,25 @@ public class API {
         void onFailure(Exception e);
 
         void onResponse(JSONObject json_root_data);
+    }
+
+    public interface JsonDataCallbackAutoE {
+        void onResponse(JSONObject json_root_data);
+    }
+    public static JsonDataCallback getJsonDataCallbackAutoE(
+            Activity activity,
+            JsonDataCallbackAutoE jsonDataCallbackAutoE
+    ) {
+        return new JsonDataCallback() {
+            @Override
+            public void onFailure(Exception e) {
+                ActivityUtils.alert(activity, e);
+            }
+            @Override
+            public void onResponse(JSONObject json_root_data) {
+                jsonDataCallbackAutoE.onResponse(json_root_data);
+            }
+        };
     }
 
     public static class OkhttpJsonDataCallback implements Callback {

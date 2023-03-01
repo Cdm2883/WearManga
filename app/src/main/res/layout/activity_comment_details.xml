@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".activity.CommentDetailsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:liftOnScroll="true">
+        <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginStart="-19.5dp"
+                app:title=" "
+                style="@style/Widget.MaterialComponents.Toolbar.Primary">
+            <Button
+                    android:id="@+id/exit_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    app:icon="@drawable/baseline_keyboard_arrow_left_24"
+                    app:iconTint="#fff"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    app:iconPadding="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="-2.7dp"
+                    android:paddingEnd="0dp"
+                    app:rippleColor="#fff"/>
+            <TextView
+                    android:id="@+id/app_bar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:paddingStart="8dp"
+                    android:textSize="13sp"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="评论详情"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
+<!--            <Button-->
+<!--                    android:id="@+id/chapters_list_btn"-->
+<!--                    android:layout_width="20dp"-->
+<!--                    android:layout_height="20dp"-->
+<!--                    android:layout_gravity="end"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    android:scaleX="0.8"-->
+<!--                    android:scaleY="0.8"-->
+<!--                    app:icon="@drawable/baseline_list_24"-->
+<!--                    app:iconTint="#fff"-->
+<!--                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"-->
+<!--                    app:iconPadding="0dp"-->
+<!--                    android:insetTop="0dp"-->
+<!--                    android:insetBottom="0dp"-->
+<!--                    android:paddingStart="-2.7dp"-->
+<!--                    android:paddingEnd="0dp"-->
+<!--                    app:rippleColor="#fff"/>-->
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <vip.cdms.wearmanga.ui.CommentsView
+            android:id="@+id/comments_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_scroll_to_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            app:tint="#fff"
+            app:backgroundTint="#000"
+            app:rippleColor="#fff"
+            app:srcCompat="@drawable/baseline_vertical_align_top_24"
+            tools:ignore="ContentDescription"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

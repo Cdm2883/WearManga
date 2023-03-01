@@ -4,14 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.view.View;
 import android.view.Window;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -19,17 +18,15 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import vip.cdms.wearmanga.R;
 import vip.cdms.wearmanga.api.API;
-import vip.cdms.wearmanga.api.ComicDetail;
+import vip.cdms.wearmanga.api.ComicAPI;
 import vip.cdms.wearmanga.databinding.ActivityChaptersListBinding;
 import vip.cdms.wearmanga.ui.ChaptersListAdapter;
-import vip.cdms.wearmanga.ui.MangaListAdapter;
-import vip.cdms.wearmanga.utils.*;
+import vip.cdms.wearmanga.utils.ActivityUtils;
+import vip.cdms.wearmanga.utils.BiliCookieJar;
+import vip.cdms.wearmanga.utils.DensityUtil;
+import vip.cdms.wearmanga.utils.SnackbarMaker;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ChaptersListActivity extends AppCompatActivity {
     private ActivityChaptersListBinding binding;
@@ -67,13 +64,14 @@ public class ChaptersListActivity extends AppCompatActivity {
 
         recyclerView = binding.recyclerView;
         chaptersListAdapter = new ChaptersListAdapter(recyclerView, jsonObject -> {
+            // todo
             SnackbarMaker.makeTop(binding.getRoot(), jsonObject.getString("title"), Snackbar.LENGTH_SHORT).show();
         });
         chaptersListAdapter.setReadEpId(readEpId);
 
         binding.fabScrollToTop.setOnClickListener(view -> binding.nestedScrollView.smoothScrollTo(0, 0));
-        binding.fabScrollToTop.hide();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.nestedScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+        binding.fabScrollToTop.post(() -> binding.fabScrollToTop.hide());
+        binding.nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (scrollY > 10) runOnUiThread(() -> binding.fabScrollToTop.show());
             else runOnUiThread(() -> binding.fabScrollToTop.hide());
         });
@@ -107,13 +105,13 @@ public class ChaptersListActivity extends AppCompatActivity {
         });
 
         if (bundle.get("ep_list") == null)
-            ComicDetail.get(
+            ComicAPI.ComicDetail(
                     new BiliCookieJar(this),
                     comicId,
                     new API.JsonDataCallback() {
                         @Override
                         public void onFailure(Exception e) {
-                            ActivityUtils.alert(ChaptersListActivity.this, null, e.toString());
+                            ActivityUtils.alert(ChaptersListActivity.this, e);
                         }
                         @Override
                         public void onResponse(JSONObject json_root_data) {

@@ -25,15 +25,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:chipSpacingVertical="-12dp"
-                    app:chipSpacingHorizontal="4dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp">
+                    app:chipSpacingHorizontal="0dp">
+<!--                app:chipSpacingHorizontal="4dp"-->
 <!--                app:chipSpacingVertical="-8dp"-->
 
                 <com.google.android.material.chip.Chip
                         android:id="@+id/chip_exit"
                         android:layout_width="33dp"
                         android:layout_height="40dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="-4dp"
                         android:textSize="12sp"
                         app:chipStrokeWidth="1dp"
                         app:chipStrokeColor="@color/stroke_color"
@@ -61,23 +62,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="64dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="56dp"
             app:tint="#fff"
             app:backgroundTint="#000"
             app:rippleColor="#fff"
-            app:srcCompat="@drawable/baseline_vertical_align_top_24"/>
+            app:srcCompat="@drawable/baseline_vertical_align_top_24"
+            tools:ignore="ContentDescription"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
+            android:layout_margin="8dp"
             app:tint="#fff"
             app:backgroundTint="#000"
             app:rippleColor="#fff"
-            app:srcCompat="@drawable/baseline_my_location_24"/>
+            app:srcCompat="@drawable/baseline_my_location_24"
+            tools:ignore="ContentDescription"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

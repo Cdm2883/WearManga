@@ -1,10 +1,7 @@
 package vip.cdms.wearmanga.activity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +11,8 @@ import vip.cdms.wearmanga.api.BiliAPIError;
 import vip.cdms.wearmanga.api.LoginByQRCode;
 import vip.cdms.wearmanga.databinding.ActivityLoginBinding;
 import vip.cdms.wearmanga.utils.ActivityUtils;
-import vip.cdms.wearmanga.utils.LogUtil;
 import vip.cdms.wearmanga.utils.SnackbarMaker;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import vip.cdms.wearmanga.utils.TimeUtils;
 
 public class LoginActivity extends AppCompatActivity {
     private final LoginActivity CONTEXT = this;
@@ -69,13 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                refreshQRCode();
-                cancel();
-            }
-        }, 800);
+        TimeUtils.setTimeout(this::refreshQRCode, 800);
     }
 
     @Override
@@ -92,13 +80,11 @@ public class LoginActivity extends AppCompatActivity {
                 .start());
     }
     private void showImage() {
-        runOnUiThread(() -> {
-            binding.card.animate()
-                    .translationY(0)
-                    .setDuration(200)
-                    .setInterpolator(new DecelerateInterpolator())
-                    .start();
-        });
+        runOnUiThread(() -> binding.card.animate()
+                .translationY(0)
+                .setDuration(200)
+                .setInterpolator(new DecelerateInterpolator())
+                .start());
     }
 
     private void refreshQRCode() {
@@ -106,13 +92,7 @@ public class LoginActivity extends AppCompatActivity {
             listenerThread.interrupt();
             qrcodeKey = null;
             hideImage();
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    refreshQRCode();
-                    cancel();
-                }
-            }, 100);
+            TimeUtils.setTimeout(this::refreshQRCode, 100);
             return;
         }
         runOnUiThread(() -> {

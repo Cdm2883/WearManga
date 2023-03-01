@@ -1,28 +1,23 @@
 package vip.cdms.wearmanga.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.material.card.MaterialCardView;
 import org.jetbrains.annotations.NotNull;
 import vip.cdms.wearmanga.R;
 import vip.cdms.wearmanga.utils.DensityUtil;
-import vip.cdms.wearmanga.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +25,9 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+/**
+ * 漫画列表 - 适配器
+ */
 public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final RecyclerView recyclerView;
     private ItemDecoration itemDecoration = null;

@@ -72,7 +72,7 @@
                             android:id="@+id/manga_cover"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:scaleType="fitCenter"
+                            android:scaleType="centerCrop"
                             tools:ignore="ContentDescription"/>
 <!--                        android:src="@drawable/manga_cover"-->
 
@@ -241,13 +241,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-8dp">
-                    <com.google.android.material.chip.Chip
-                            android:id="@+id/manga_info_renewal_time"
+                    <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            app:chipIcon="@drawable/baseline_event_24"/>
-<!--                        android:text="每周二、周四、周日更新，漫画平台独家领先全网3回"-->
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                        <com.google.android.material.chip.Chip
+                                android:id="@+id/manga_info_renewal_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                app:chipIcon="@drawable/baseline_event_24"/>
+    <!--                        android:text="每周二、周四、周日更新，漫画平台独家领先全网3回"-->
+                    </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
 
@@ -326,7 +332,8 @@
             app:layout_anchorGravity="bottom|end"
             app:tint="#fff"
             app:backgroundTint="@color/fav_fab_no"
-            app:srcCompat="@drawable/baseline_star_border_24"/>
+            app:srcCompat="@drawable/baseline_star_border_24"
+            tools:ignore="ContentDescription"/>
 <!--    app:backgroundTint="#ff9d11"-->
 <!--    app:srcCompat="@drawable/baseline_star_24"-->
 

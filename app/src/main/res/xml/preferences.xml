@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="通用">
+        <DropDownPreference
+                android:key="main_start_destination"
+                android:entries="@array/main_start_destination"
+                android:entryValues="@array/main_start_destination_values"
+                android:title="默认显示页面"
+                app:useSimpleSummaryProvider="true"/>
+        <SwitchPreferenceCompat
+                android:key="comments_show"
+                android:title="显示评论"
+                android:defaultValue="true"/>
+        <SeekBarPreference
+                android:key="image_size"
+                android:title="图片尺寸 (%)"
+                app:min="1"
+                android:max="120"
+                android:defaultValue="100"
+                app:showSeekBarValue="true"/>
+        <SeekBarPreference
+                android:key="image_quality"
+                android:title="图片质量 (%)"
+                app:min="1"
+                android:max="100"
+                android:defaultValue="100"
+                app:showSeekBarValue="true"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="竖版漫画阅读器">
+        <SwitchPreferenceCompat
+                android:key="comic_vertical_reader_image_zoom"
+                android:title="图片可缩放"
+                android:defaultValue="true"/>
+        <SeekBarPreference
+                android:dependency="comic_vertical_reader_image_zoom"
+                android:key="comic_vertical_reader_image_zoom_max"
+                android:title="最大缩放倍数"
+                app:min="1"
+                android:max="5"
+                android:defaultValue="3"
+                app:showSeekBarValue="true"/>
+    </PreferenceCategory>
+</PreferenceScreen>

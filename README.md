@@ -10,8 +10,19 @@
 ## ✅ 公测
 当前项目处于**公测**阶段, 如有发现问题, 欢迎[issues](https://github.com/Cdm2883/WearManga/issues)!  
 安装包在项目的这个位置 -> [app/release/app-release.apk](app/release/app-release.apk) *(正式版再发release)*  
-QQ交流群: 945535472 (加群群备注来源)
+QQ交流群: 945535472 (加群备注来源)
 
 ## 🎈 声明 & 开源
-**一切开发仅在于交流学习, 请勿用于非法用途!**  
+**一切开发仅供学习和娱乐用途使用, 请勿用于非法用途!**  
 WearManga 采用 [GPLv3](LICENSE) 协议开源, 软件本身不包含商业行为, 完全免费
+
+### 💖 致谢开源项目
+排名不分前后
+
+| Project                                            | License                      |
+|----------------------------------------------------|------------------------------|
+| [OkHttp](https://github.com/square/okhttp)         | Apache License 2.0           |
+| [ZXing](https://github.com/zxing/zxing)            | Apache License 2.0           |
+| [Glide](https://github.com/bumptech/glide)         | BSD, part MIT and Apache 2.0 |
+| [PhotoView](https://github.com/Baseflow/PhotoView) | Apache License 2.0           |
+| [Fastjson](https://github.com/alibaba/fastjson)    | Apache License 2.0           |

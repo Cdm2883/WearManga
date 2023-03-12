@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.ComicVerticalReaderActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginStart="-19.5dp"
+                app:title=" "
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                app:layout_scrollFlags="scroll|enterAlways|snap">
+
+            <Button
+                    android:id="@+id/exit_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="25.5dp"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    app:icon="@drawable/baseline_keyboard_arrow_left_24"
+                    app:iconTint="#fff"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    app:iconPadding="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="-2.7dp"
+                    android:paddingEnd="0dp"
+                    app:rippleColor="#fff"/>
+
+            <TextView
+                    android:id="@+id/app_bar_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:paddingStart="8dp"
+                    android:textSize="13sp"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tools:ignore="RtlSymmetry"/>
+            <!--                        <Button-->
+            <!--                                android:id="@+id/setting_btn"-->
+            <!--                                android:layout_width="20dp"-->
+            <!--                                android:layout_height="20dp"-->
+            <!--                                android:layout_gravity="end"-->
+            <!--                                android:layout_marginEnd="8dp"-->
+            <!--                                android:scaleX="0.8"-->
+            <!--                                android:scaleY="0.8"-->
+            <!--                                app:icon="@drawable/baseline_list_24"-->
+            <!--                                app:iconTint="#fff"-->
+            <!--                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"-->
+            <!--                                app:iconPadding="0dp"-->
+            <!--                                android:insetTop="0dp"-->
+            <!--                                android:insetBottom="0dp"-->
+            <!--                                android:paddingStart="-2.7dp"-->
+            <!--                                android:paddingEnd="0dp"-->
+            <!--                                app:rippleColor="#fff"/>-->
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
+                    android:id="@+id/images"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:orientation="horizontal">
+                <Button
+                        android:id="@+id/last_btn"
+                        android:layout_width="72dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:icon="@drawable/baseline_keyboard_arrow_left_24"
+                        android:paddingStart="6dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                        tools:ignore="HardcodedText,RtlSymmetry"/>
+<!--                android:text="上一话"-->
+                <Button
+                        android:id="@+id/next_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        style="@style/Widget.MaterialComponents.Button"
+                        android:text="下一话"
+                        tools:ignore="HardcodedText"/>
+            </LinearLayout>
+
+            <vip.cdms.wearmanga.ui.CommentsView
+                    android:id="@+id/comments_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </vip.cdms.wearmanga.ui.CommentsView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

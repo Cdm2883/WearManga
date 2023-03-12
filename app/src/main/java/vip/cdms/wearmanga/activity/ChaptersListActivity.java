@@ -23,7 +23,7 @@ import vip.cdms.wearmanga.databinding.ActivityChaptersListBinding;
 import vip.cdms.wearmanga.ui.ChaptersListAdapter;
 import vip.cdms.wearmanga.utils.ActivityUtils;
 import vip.cdms.wearmanga.utils.BiliCookieJar;
-import vip.cdms.wearmanga.utils.DensityUtil;
+import vip.cdms.wearmanga.utils.MathUtils;
 import vip.cdms.wearmanga.utils.SnackbarMaker;
 
 import java.util.ArrayList;
@@ -63,10 +63,7 @@ public class ChaptersListActivity extends AppCompatActivity {
         readEpId = bundle.getInt("read_epid", -1);
 
         recyclerView = binding.recyclerView;
-        chaptersListAdapter = new ChaptersListAdapter(recyclerView, jsonObject -> {
-            // todo
-            SnackbarMaker.makeTop(binding.getRoot(), jsonObject.getString("title"), Snackbar.LENGTH_SHORT).show();
-        });
+        chaptersListAdapter = new ChaptersListAdapter(recyclerView, jsonObject -> ActivityUtils.comicReader(this, comicId, jsonObject.getInteger("id")));
         chaptersListAdapter.setReadEpId(readEpId);
 
         binding.fabScrollToTop.setOnClickListener(view -> binding.nestedScrollView.smoothScrollTo(0, 0));
@@ -99,7 +96,7 @@ public class ChaptersListActivity extends AppCompatActivity {
                 int finalItemOrder = itemOrder;
                 runOnUiThread(() -> binding.nestedScrollView.smoothScrollTo(
                         0,
-                        (int) (binding.chipGroup.getHeight() + chaptersListAdapter.getYByPosition(finalItemOrder) - DensityUtil.dp2px(ChaptersListActivity.this, 8)))
+                        (int) (binding.chipGroup.getHeight() + chaptersListAdapter.getYByPosition(finalItemOrder) - MathUtils.dp2px(ChaptersListActivity.this, 8)))
                 );
             }
         });
@@ -108,20 +105,13 @@ public class ChaptersListActivity extends AppCompatActivity {
             ComicAPI.ComicDetail(
                     new BiliCookieJar(this),
                     comicId,
-                    new API.JsonDataCallback() {
-                        @Override
-                        public void onFailure(Exception e) {
-                            ActivityUtils.alert(ChaptersListActivity.this, e);
-                        }
-                        @Override
-                        public void onResponse(JSONObject json_root_data) {
-                            readEpId = json_root_data.getInteger("read_epid");
-                            chaptersListAdapter.setReadEpId(readEpId);
-                            ep_list_json = json_root_data.getJSONArray("ep_list");
+                    API.getJsonDataCallbackAutoE(this, json_root_data -> {
+                        readEpId = json_root_data.getInteger("read_epid");
+                        chaptersListAdapter.setReadEpId(readEpId);
+                        ep_list_json = json_root_data.getJSONArray("ep_list");
 
-                            load();
-                        }
-                    }
+                        load();
+                    })
             );
         else {
             ep_list_json = JSONArray.parseArray(bundle.getString("ep_list", "[]"));
@@ -146,7 +136,7 @@ public class ChaptersListActivity extends AppCompatActivity {
 //            }
             for (int i = ep_list_json.size() - 1; i >= 0; i--) {
                 JSONArray arrayItem = (JSONArray) ep_list_json.get(i);
-                for (int j = arrayItem.size() - 1; j >= 0; j--) epListPut((JSONObject) arrayItem.get(i));
+                for (int j = arrayItem.size() - 1; j >= 0; j--) epListPut((JSONObject) arrayItem.get(j));
             }
         } else if (ep_list_json.get(0) instanceof JSONObject) {
             for (int i = ep_list_json.size() - 1; i >= 0; i--) epListPut((JSONObject) ep_list_json.get(i));

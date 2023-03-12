@@ -21,7 +21,7 @@ import vip.cdms.wearmanga.api.BiliAPI;
 import vip.cdms.wearmanga.databinding.ActivityCommentDetailsBinding;
 import vip.cdms.wearmanga.ui.CommentsView;
 import vip.cdms.wearmanga.utils.BiliCookieJar;
-import vip.cdms.wearmanga.utils.DensityUtil;
+import vip.cdms.wearmanga.utils.MathUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -64,7 +64,7 @@ public class CommentDetailsActivity extends AppCompatActivity {
             if (event.getAction() != MotionEvent.ACTION_UP) return false;
 
             float touchX = event.getX();
-            int dp30 = DensityUtil.dp2px(CommentDetailsActivity.this, 30);
+            int dp30 = MathUtils.dp2px(CommentDetailsActivity.this, 30);
 
             if (touchX <= dp30) exitAction.onClick(view);
 

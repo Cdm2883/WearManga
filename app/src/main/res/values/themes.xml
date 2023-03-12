@@ -1,6 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Theme.WearManga" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.WearManga" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 <!--    <style name="Theme.WearManga" parent="Theme.Material3.DayNight.NoActionBar">-->
         <!-- Primary brand color. -->
 <!--        <item name="colorPrimary">@color/purple_500</item>-->
@@ -20,6 +20,9 @@
 <!--        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>-->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+    <style name="Theme.WearManga.NoScrollBack" parent="Theme.WearManga">
+        <item name="android:windowSwipeToDismiss">false</item>
     </style>
     <style name="Theme.WearManga.BottomAppBar.Colored" parent="Widget.MaterialComponents.BottomAppBar.Colored"/>
     <style name="Theme.WearManga.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar"/>

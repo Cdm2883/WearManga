@@ -30,6 +30,13 @@
                 android:name=".activity.CommentDetailsActivity"
                 android:exported="false"/>
         <activity
+                android:name=".activity.ComicVerticalReaderActivity"
+                android:exported="false"
+                android:theme="@style/Theme.WearManga.NoScrollBack"/>
+        <activity
+                android:name=".activity.ComicHorizontalReaderActivity"
+                android:exported="false"/>
+        <activity
                 android:name=".MainActivity"
                 android:exported="true">
             <intent-filter>

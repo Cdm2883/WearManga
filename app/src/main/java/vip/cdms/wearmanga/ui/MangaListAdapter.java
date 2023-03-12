@@ -17,13 +17,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.card.MaterialCardView;
 import org.jetbrains.annotations.NotNull;
 import vip.cdms.wearmanga.R;
-import vip.cdms.wearmanga.utils.DensityUtil;
+import vip.cdms.wearmanga.utils.MathUtils;
+import vip.cdms.wearmanga.utils.SettingsUtils;
+import vip.cdms.wearmanga.utils.StringUtils;
+import vip.cdms.wearmanga.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * 漫画列表 - 适配器
@@ -35,6 +37,37 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private int orientation = RecyclerView.VERTICAL;
     private int horizontalHeight;
+
+    private boolean checkable = false;
+    private boolean checkableControl = false;
+    private final ArrayList<Integer> checkList = new ArrayList<>();
+    public MangaListAdapter setCheckable(boolean checkable) {
+        this.checkable = checkable;
+        checkableControl = checkable;
+        notifyItemRangeRemoved(0, localDataSet.size());
+        notifyItemRangeInserted(0, localDataSet.size());
+        reloadItemDecoration();
+        return this;
+    }
+    public boolean isCheckable() {
+        return checkable;
+    }
+    public int[] checkList() {
+//        return checkList.stream().mapToInt(value -> value).toArray();
+        int[] ints = new int[checkList.size()];
+        for (int i = 0; i < checkList.size(); i++) {
+            ints[i] = checkList.get(i);
+        }
+        return ints;
+    }
+    public void checkListClear() {
+        checkList.clear();
+        setCheckable(false);
+        checkable = true;
+        checkableControl = false;
+        TimeUtils.setTimeout(() -> recyclerView.post(() -> setCheckable(true)), 100);
+        checkList.clear();
+    }
 
     public void setItemDecoration(ItemDecoration itemDecoration) {
         if (this.itemDecoration != null) recyclerView.removeItemDecoration(this.itemDecoration);
@@ -81,9 +114,11 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public static class DataItemHeader extends DataItem {
         private final String title;
-        private final String subtitle;
+        private final CharSequence subtitle;
 
-        public DataItemHeader(String title, String subtitle) {
+        private View.OnClickListener onClickListener = null;
+
+        public DataItemHeader(String title, CharSequence subtitle) {
             TYPE = DataItem.TYPE_HEADER;
             this.title = title;
             this.subtitle = subtitle;
@@ -93,8 +128,17 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return title;
         }
 
-        public String getSubtitle() {
+        public CharSequence getSubtitle() {
             return subtitle;
+        }
+
+        public View.OnClickListener getOnClickListener() {
+            return onClickListener;
+        }
+
+        public DataItemHeader setOnClickListener(View.OnClickListener onClickListener) {
+            this.onClickListener = onClickListener;
+            return this;
         }
     }
     public static class ViewHolderHeader extends RecyclerView.ViewHolder {
@@ -159,6 +203,7 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private final String imageUrl;
         private final String title;
         private final String subtitle;
+        private int id = -1;
 
         private View.OnClickListener onClickListener = null;
         private View.OnLongClickListener onLongClickListener = null;
@@ -168,6 +213,14 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.imageUrl = image;
             this.title = title;
             this.subtitle = subtitle.trim().isEmpty() ? null : subtitle;
+        }
+
+        public int getId() {
+            return id;
+        }
+        public DataItemNormal id(int id) {
+            this.id = id;
+            return this;
         }
 
         public DataItemNormal setOnClickListener(View.OnClickListener onClickListener) {
@@ -283,9 +336,9 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 layoutParams.leftMargin = 0;
                 layoutParams.rightMargin = 0;
                 if (viewX < halfScreenWidthPixels)
-                    layoutParams.leftMargin = DensityUtil.dp2px(viewContext, 4);
+                    layoutParams.leftMargin = MathUtils.dp2px(viewContext, 4);
                 else
-                    layoutParams.rightMargin = DensityUtil.dp2px(viewContext, 4);
+                    layoutParams.rightMargin = MathUtils.dp2px(viewContext, 4);
 
                 view.setLayoutParams(layoutParams);
             });
@@ -351,7 +404,12 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             viewHolderHeader.getTitle().setText(dataItemHeader.getTitle());
             if (dataItemHeader.getSubtitle() == null) viewHolderHeader.getSubtitle().setVisibility(View.GONE);
-            else viewHolderHeader.getSubtitle().setText(dataItemHeader.getSubtitle());
+            else {
+                viewHolderHeader.getSubtitle().setVisibility(View.VISIBLE);
+                viewHolderHeader.getSubtitle().setText(dataItemHeader.getSubtitle());
+            }
+
+            if (dataItemHeader.getOnClickListener() != null) viewHolderHeader.getView().setOnClickListener(dataItemHeader.getOnClickListener());
         } else if (
                 (viewHolder instanceof ViewHolderMiddleHeader)
                 && (dataItem instanceof DataItemMiddleHeader)
@@ -370,7 +428,7 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             viewHolderNormal.getCard().post(() -> {
                 ConstraintLayout.LayoutParams cardLayoutParams = (ConstraintLayout.LayoutParams) viewHolderNormal.getCard().getLayoutParams();
 
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+//                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                 if (orientation == RecyclerView.VERTICAL) {
                     cardLayoutParams.height = viewHolderNormal.getCard().getWidth() / 3 * 4;
                 } else if (orientation == RecyclerView.HORIZONTAL) {
@@ -379,17 +437,16 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
                 viewHolderNormal.getCard().setLayoutParams(cardLayoutParams);
 
+                double imageSize = SettingsUtils.getInt("image_size", 100) * 0.01;
                 String imageUrl = dataItemNormal.getImageUrl();
-                if (Pattern.compile(
-                        "^*.hdslb.com/bfs/.+/.+\\..*$"
-                ).matcher(imageUrl).matches()) imageUrl = imageUrl + "@300w_400h";
-//                ).matcher(imageUrl).matches()) imageUrl = imageUrl + "@600w_800h";
+                imageUrl = StringUtils.biliImageUrl(imageUrl, 300, 400);
                 Glide.with(viewHolderNormal.getView())
                         .setDefaultRequestOptions(new RequestOptions()
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
 //                                .override(300, 400)
-                                .override(viewHolderNormal.getCard().getWidth(), viewHolderNormal.getCard().getHeight())
+//                                .override(viewHolderNormal.getCard().getWidth(), viewHolderNormal.getCard().getHeight())
+                                .override((int) (300 * imageSize), (int) (400 * imageSize))
                                 .format(DecodeFormat.PREFER_RGB_565))
                         .load(imageUrl)
                         .placeholder(R.drawable.baseline_book_24)
@@ -401,8 +458,45 @@ public class MangaListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (subtitle == null) viewHolderNormal.getSubtitle().setVisibility(View.GONE);
             else viewHolderNormal.getSubtitle().setText(subtitle);
 
-            if (dataItemNormal.getOnClickListener() != null) viewHolderNormal.getCard().setOnClickListener(dataItemNormal.getOnClickListener());
-            if (dataItemNormal.getOnLongClickListener() != null) viewHolderNormal.getCard().setOnLongClickListener(dataItemNormal.getOnLongClickListener());
+//            if (dataItemNormal.getOnClickListener() != null) viewHolderNormal.getCard().setOnClickListener(dataItemNormal.getOnClickListener());
+//            if (dataItemNormal.getOnLongClickListener() != null) viewHolderNormal.getCard().setOnLongClickListener(dataItemNormal.getOnLongClickListener());
+//            if (checkable) {
+//                viewHolderNormal.getCard().setOnLongClickListener(v -> {
+//                    MaterialCardView card = (MaterialCardView) v;
+//                    boolean checked = !card.isChecked();
+//                    card.setChecked(checked);
+//                    if (checked) checkList.add(dataItemNormal.getId());
+//                    else checkList.remove((Integer) dataItemNormal.getId());
+//                    return dataItemNormal.getOnLongClickListener() != null && dataItemNormal.getOnLongClickListener().onLongClick(v);
+//                });
+//            } else if (dataItemNormal.getOnClickListener() != null) viewHolderNormal.getCard().setOnClickListener(dataItemNormal.getOnClickListener());
+//            if (!checkable) viewHolderNormal.getCard().setChecked(false);
+            if (!checkable || !checkableControl) viewHolderNormal.getCard().setChecked(false);
+            Runnable toggleChecked = () -> {
+                boolean checked = !viewHolderNormal.getCard().isChecked();
+                viewHolderNormal.getCard().setChecked(checked);
+                if (checked) checkList.add(dataItemNormal.getId());
+                else checkList.remove((Integer) dataItemNormal.getId());
+            };
+            viewHolderNormal.getCard().setOnClickListener(v -> {
+                if (!checkable) {
+                    if (dataItemNormal.getOnClickListener() != null) dataItemNormal.getOnClickListener().onClick(v);
+                    return;
+                }
+                if (checkList.size() > 0) toggleChecked.run();
+                else if (dataItemNormal.getOnClickListener() != null) dataItemNormal.getOnClickListener().onClick(v);
+            });
+            viewHolderNormal.getCard().setOnLongClickListener(v -> {
+                if (!checkable) {
+                    if (dataItemNormal.getOnLongClickListener() != null) return dataItemNormal.getOnLongClickListener().onLongClick(v);
+                    return true;
+                }
+                if (checkList.size() > 0) {
+                    checkListClear();
+                } else toggleChecked.run();
+                if (dataItemNormal.getOnLongClickListener() != null) return dataItemNormal.getOnLongClickListener().onLongClick(v);
+                return true;
+            });
         }
     }
 

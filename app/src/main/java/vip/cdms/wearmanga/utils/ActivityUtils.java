@@ -3,7 +3,10 @@ package vip.cdms.wearmanga.utils;
 import android.app.Activity;
 import android.content.Intent;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import vip.cdms.wearmanga.activity.ComicVerticalReaderActivity;
+import vip.cdms.wearmanga.api.API;
 import vip.cdms.wearmanga.api.BiliAPIError;
+import vip.cdms.wearmanga.api.ComicAPI;
 
 public class ActivityUtils {
     public static void alert(Activity activity, CharSequence title, CharSequence message) {
@@ -28,5 +31,17 @@ public class ActivityUtils {
         activity.startActivity(intent);
         // 杀掉以前进程
         android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    public static void comicReader(Activity activity, int comic_id, int ep_id) {
+        ComicAPI.ComicDetail(
+                new BiliCookieJar(activity),
+                comic_id,
+                API.getJsonDataCallbackAutoE(activity, json_root_data -> comicReader(activity, json_root_data.getInteger("orientation"), comic_id, ep_id))
+        );
+    }
+    public static void comicReader(Activity activity, int orientation, int comic_id, int ep_id) {
+        /*if (orientation == 2) */ComicVerticalReaderActivity.startActivity(activity, comic_id, ep_id);
+//        else ComicHorizontalReaderActivity.startActivity(activity, comic_id, ep_id);
     }
 }

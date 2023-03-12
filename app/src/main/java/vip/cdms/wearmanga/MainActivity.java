@@ -2,6 +2,7 @@ package vip.cdms.wearmanga;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.NavInflater;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -24,9 +27,11 @@ import vip.cdms.wearmanga.api.UserAPI;
 import vip.cdms.wearmanga.databinding.ActivityMainBinding;
 import vip.cdms.wearmanga.utils.ActivityUtils;
 import vip.cdms.wearmanga.utils.BiliCookieJar;
+import vip.cdms.wearmanga.utils.SettingsUtils;
 import vip.cdms.wearmanga.utils.TimeUtils;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
@@ -35,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     //    private View navHeader;
     private TextView drawerHeaderTitle;
     private TextView drawerHeaderSubtitle;
+
+    private SharedPreferences temp;
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         drawerHeaderTitle = navHeader.findViewById(R.id.drawerHeaderTitle);
         drawerHeaderSubtitle = navHeader.findViewById(R.id.drawerHeaderSubtitle);
 
+        temp = getSharedPreferences("temp", MODE_PRIVATE);
+        settings = SettingsUtils.getSettings(this);
+
         /* 侧边栏 */
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -56,16 +67,31 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setLayoutParams(navigationViewLayoutParams);
         // 配置导航
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_mine)  // 在这里添加item
+                R.id.nav_home, R.id.nav_bookshelf, R.id.nav_mine/*, R.id.nav_settings*/)  // 在这里添加item
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        UserAPI.nav(new BiliCookieJar(this), new API.JsonDataCallback() {
+        NavInflater navInflater = navController.getNavInflater();
+        NavGraph navGraph = navInflater.inflate(R.navigation.mobile_navigation);
+
+        int startDestination = R.id.nav_home;
+        String[] mainStartDestinationValues = getResources().getStringArray(R.array.main_start_destination_values);
+        String mainStartDestination = settings.getString("main_start_destination", mainStartDestinationValues[0]);
+        if (Objects.equals(mainStartDestination, mainStartDestinationValues[0])) startDestination = temp.getInt("main_start_destination_id", R.id.nav_home);
+//        else if (Objects.equals(mainStartDestination, mainStartDestinationValues[1])) startDestination = R.id.nav_home;
+        else if (Objects.equals(mainStartDestination, mainStartDestinationValues[2])) startDestination = R.id.nav_classification;
+        else if (Objects.equals(mainStartDestination, mainStartDestinationValues[3])) startDestination = R.id.nav_bookshelf;
+        else if (Objects.equals(mainStartDestination, mainStartDestinationValues[4])) startDestination = R.id.nav_mine;
+
+        navGraph.setStartDestination(startDestination);
+        navController.setGraph(navGraph);
+
+        UserAPI.nav(new BiliCookieJar(this), new API.JsonDataCallback<JSONObject>() {
             @Override
-            public void onFailure(Exception e) {
+            public void onFailure(Exception e, JSONObject json_root) {
                 if (e instanceof BiliAPIError) {
                     BiliAPIError biliAPIError = (BiliAPIError) e;
                     int code = biliAPIError.getCode();
@@ -126,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         // 通过反射使其图标可见
-//        if (menu != null) {
         if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
             try {
                 Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
@@ -136,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-//        }
         return super.onMenuOpened(featureId, menu);
     }
 

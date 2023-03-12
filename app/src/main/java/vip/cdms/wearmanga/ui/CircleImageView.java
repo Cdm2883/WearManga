@@ -2,25 +2,19 @@ package vip.cdms.wearmanga.ui;
 
 import android.content.Context;
 import android.graphics.*;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import org.jetbrains.annotations.NotNull;
 
 public class CircleImageView extends AppCompatImageView {
-    private RectF srcRectF;
-    private Paint paint;
-    private Path path;
+    private final RectF srcRectF;
+    private final Paint paint;
+    private final Path path;
 
-    private Xfermode xfermode;
+    private final Xfermode xfermode;
 
     private int width;
     private int height;
@@ -70,6 +64,7 @@ public class CircleImageView extends AppCompatImageView {
     protected void onDraw(Canvas canvas) {
         // 使用离屏缓存，新建一个srcRectF区域大小的图层
         canvas.saveLayer(srcRectF, null, Canvas.ALL_SAVE_FLAG);
+//        canvas.saveLayer(srcRectF, null);
         // ImageView自身的绘制流程，即绘制图片
         super.onDraw(canvas);
         // 给path添加一个圆形

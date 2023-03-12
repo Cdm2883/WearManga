@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="main_start_destination">
+        <item>上一次退出时页面</item>
+        <item>首页</item>
+        <item>分类</item>
+        <item>书架</item>
+        <item>我的</item>
+    </string-array>
+    <string-array name="main_start_destination_values">
+        <item>EXIT</item>
+        <item>HOME</item>
+        <item>CLASSIFICATION</item>
+        <item>BOOKSHELF</item>
+        <item>MINE</item>
+    </string-array>
+</resources>

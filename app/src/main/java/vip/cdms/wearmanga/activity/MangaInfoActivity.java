@@ -3,6 +3,7 @@ package vip.cdms.wearmanga.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -38,6 +39,7 @@ import com.google.android.material.snackbar.Snackbar;
 import vip.cdms.wearmanga.R;
 import vip.cdms.wearmanga.api.API;
 import vip.cdms.wearmanga.api.BiliAPI;
+import vip.cdms.wearmanga.api.BookshelfAPI;
 import vip.cdms.wearmanga.api.ComicAPI;
 import vip.cdms.wearmanga.databinding.ActivityMangaInfoBinding;
 import vip.cdms.wearmanga.ui.AppBarStateChangeListener;
@@ -48,7 +50,6 @@ import vip.cdms.wearmanga.utils.*;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 public class MangaInfoActivity extends AppCompatActivity {
     private final MangaInfoActivity CONTEXT = this;
@@ -64,13 +65,14 @@ public class MangaInfoActivity extends AppCompatActivity {
     private boolean manga_cover_loaded = false;
     private boolean manga_header_loaded = false;
 
-//    private RecyclerView recyclerView;
     private MangaListAdapter mangaListAdapter;
 
     private CommentsView commentsView;
 
     private boolean scrollLoadMoreRecommend = false;
     private boolean scrollLoadReply = false;
+
+    private SharedPreferences settings;
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
@@ -86,6 +88,9 @@ public class MangaInfoActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         comicId = getIntent().getIntExtra("comic_id", -1);
+
+        settings = SettingsUtils.getSettings(this);
+        if (!settings.getBoolean("comments_show", true)) binding.commentsHeader.setVisibility(View.GONE);
 
         // appBar高度全屏
         binding.appBar.post(() -> {
@@ -134,7 +139,7 @@ public class MangaInfoActivity extends AppCompatActivity {
 
             float touchX = event.getX();
             int toolbarWidth = binding.toolbar.getWidth();
-            int dp30 = DensityUtil.dp2px(CONTEXT, 30);
+            int dp30 = MathUtils.dp2px(CONTEXT, 30);
 
             if (touchX <= dp30) exitAction.onClick(view);
             else if (touchX >= (toolbarWidth - dp30)) chaptersListAction.onClick(view);
@@ -143,6 +148,62 @@ public class MangaInfoActivity extends AppCompatActivity {
             return false;
         });
 
+        loadInfo();
+
+        // 配置RecyclerView
+        RecyclerView recyclerView = binding.recyclerViewManga;
+        mangaListAdapter = new MangaListAdapter(recyclerView);
+        mangaListAdapter.setLayoutHorizontal((int) (getResources().getDisplayMetrics().widthPixels * 0.5 / 3 * 4));
+        mangaListAdapter.setItemDecoration(new MangaListAdapter.ItemDecoration(this));
+
+        // 配置评论
+        commentsView = binding.commentsView;
+        binding.commentsHeader.setOnClickListener(v -> replySort());
+
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) */binding.scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            int needScrollY = scrollY + getResources().getDisplayMetrics().heightPixels;
+            if (needScrollY >= binding.recyclerViewManga.getY() && !scrollLoadMoreRecommend) {
+                scrollLoadMoreRecommend = true;
+                loadMoreRecommend();
+            }
+            if (needScrollY >= binding.commentsHeader.getY() && !scrollLoadReply) {
+                scrollLoadReply = true;
+                replySort();
+            }
+            if (scrollLoadMoreRecommend && scrollLoadReply) binding.scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) null);
+        });/* else {
+            loadMoreRecommend();
+            replySort();
+        }*/
+
+        // todo delete :)
+        binding.headerCard.setOnClickListener(v -> v.animate()
+//                    .rotation(new Random().nextInt(360))
+//                    .scaleX((float) (new Random().nextInt(50) * 0.01 + 0.5))
+//                    .scaleY((float) (new Random().nextInt(50) * 0.01 + 0.5))
+                .x(new Random().nextInt(getResources().getDisplayMetrics().widthPixels - v.getWidth()))
+                .y(new Random().nextInt(getResources().getDisplayMetrics().heightPixels - v.getHeight()))
+                .start());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        loadInfo();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void loadInfo() {
         ComicAPI.ComicDetail(
                 new BiliCookieJar(this),
                 comicId,
@@ -159,16 +220,13 @@ public class MangaInfoActivity extends AppCompatActivity {
 
                         binding.headerCardSubtitle.setText(StringUtils.join(", ", json_root_data.getJSONArray("author_name")));
 
+                        double imageSize = settings.getInt("image_size", 100) * 0.01;
                         String vertical_cover = json_root_data.getString("vertical_cover");
-                        if (Pattern.compile(
-                                "^*.hdslb.com/bfs/.+/.+\\..*$"
-                        ).matcher(vertical_cover).matches()) vertical_cover = vertical_cover + "@300w_400h";
+                        vertical_cover = StringUtils.biliImageUrl(vertical_cover, 300, 400);
                         Glide.with(binding.toolbarLayout)
                                 .setDefaultRequestOptions(new RequestOptions()
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                        .override(
-                                                binding.headerCard.getWidth(),
-                                                binding.headerCard.getHeight())
+                                        .override((int) (300 * imageSize), (int) (400 * imageSize))
                                         .format(DecodeFormat.PREFER_RGB_565))
                                 .load(vertical_cover)
                                 .placeholder(R.drawable.baseline_book_24)
@@ -217,6 +275,8 @@ public class MangaInfoActivity extends AppCompatActivity {
                                 })
                                 .into(binding.mangaHeader);
 
+
+                        int continueReadingEpid = json_root_data.getInteger("read_epid");
                         StringBuilder continueReadingBtnText = new StringBuilder();
                         String json_root_data_read_short_title = json_root_data.getString("read_short_title");
                         if (json_root_data_read_short_title.isEmpty()) {
@@ -229,19 +289,22 @@ public class MangaInfoActivity extends AppCompatActivity {
 
                                 continueReadingBtnText.append("开始阅读 ");
                                 continueReadingBtnText.append(StringUtils.shortTitle(json_root_data_ep_list_last_last_short_title));
+                                continueReadingEpid = json_root_data_ep_list_last_last.getInteger("id");
                             } else if (json_root_data_ep_list_last instanceof JSONObject) {
                                 JSONObject json_root_data_ep_list_last_last = (JSONObject) json_root_data_ep_list_last;
                                 String json_root_data_ep_list_last_last_short_title = json_root_data_ep_list_last_last.getString("short_title");
 
                                 continueReadingBtnText.append("开始阅读 ");
                                 continueReadingBtnText.append(StringUtils.shortTitle(json_root_data_ep_list_last_last_short_title));
+                                continueReadingEpid = json_root_data_ep_list_last_last.getInteger("id");
                             }
                         } else {
                             continueReadingBtnText.append("续看 ");
                             continueReadingBtnText.append(StringUtils.shortTitle(json_root_data_read_short_title));
                         }
+                        int finalContinueReadingEpid = continueReadingEpid;
                         binding.continueReadingBtn.setText(continueReadingBtnText);
-                        // todo continueReadingBtn -> [Action] <-
+                        binding.continueReadingBtn.setOnClickListener(v -> ActivityUtils.comicReader(CONTEXT, json_root_data.getInteger("orientation"), comicId, finalContinueReadingEpid));
 
                         String introduction = json_root_data.getString("introduction");
                         if (introduction.trim().isEmpty()) binding.mangaInfoIntroduction.setVisibility(View.GONE);
@@ -257,51 +320,6 @@ public class MangaInfoActivity extends AppCompatActivity {
                     });
                 })
         );
-
-        // 配置RecyclerView
-        RecyclerView recyclerView = binding.recyclerViewManga;
-        mangaListAdapter = new MangaListAdapter(recyclerView);
-        mangaListAdapter.setLayoutHorizontal((int) (getResources().getDisplayMetrics().widthPixels * 0.5 / 3 * 4));
-        mangaListAdapter.setItemDecoration(new MangaListAdapter.ItemDecoration(this));
-
-        // 配置评论
-        commentsView = binding.commentsView;
-        binding.commentsHeader.setOnClickListener(v -> replySort());
-
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) */binding.scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            int needScrollY = scrollY + getResources().getDisplayMetrics().heightPixels;
-            if (needScrollY >= binding.recyclerViewManga.getY() && !scrollLoadMoreRecommend) {
-                scrollLoadMoreRecommend = true;
-                loadMoreRecommend();
-            }
-            if (needScrollY >= binding.commentsHeader.getY() && !scrollLoadReply) {
-                scrollLoadReply = true;
-                replySort();
-            }
-            if (scrollLoadMoreRecommend && scrollLoadReply) binding.scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) null);
-        });/* else {
-            loadMoreRecommend();
-            replySort();
-        }*/
-
-        // todo delete :)
-        binding.headerCard.setOnClickListener(v -> v.animate()
-//                    .rotation(new Random().nextInt(360))
-//                    .scaleX((float) (new Random().nextInt(50) * 0.01 + 0.5))
-//                    .scaleY((float) (new Random().nextInt(50) * 0.01 + 0.5))
-                .x(new Random().nextInt(getResources().getDisplayMetrics().widthPixels - v.getWidth()))
-                .y(new Random().nextInt(getResources().getDisplayMetrics().heightPixels - v.getHeight()))
-                .start());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     private boolean favStatus = false;
@@ -328,11 +346,8 @@ public class MangaInfoActivity extends AppCompatActivity {
         });
 
         if (!onEvent) return;
-        if (favStatus) {
-            SnackbarMaker.makeTop(binding.getRoot(), "yes", Snackbar.LENGTH_SHORT).show();
-        } else {
-            SnackbarMaker.makeTop(binding.getRoot(), "no", Snackbar.LENGTH_SHORT).show();
-        }
+        if (favStatus) BookshelfAPI.AddFavorite(new BiliCookieJar(this), comicId, API.getJsonDataCallbackAutoE(this, json_root_data -> {}));
+        else BookshelfAPI.DeleteFavorite(new BiliCookieJar(this), comicId, API.getJsonDataCallbackAutoE(this, json_root_data -> {}));
     }
 
     private void loadMoreRecommend() {
@@ -365,6 +380,7 @@ public class MangaInfoActivity extends AppCompatActivity {
 
     private int replyNowSort = BiliAPI.REPLY_SORT_TIME;
     private void replySort() {
+        if (!settings.getBoolean("comments_show", true)) return;
         SpannableString spannableString = new SpannableString("按热度排序 按时间排序");
         if (replyNowSort == BiliAPI.REPLY_SORT_TIME) {
             replyNowSort = BiliAPI.REPLY_SORT_REPLY;

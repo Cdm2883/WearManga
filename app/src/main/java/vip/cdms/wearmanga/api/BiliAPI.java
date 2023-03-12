@@ -1,5 +1,6 @@
 package vip.cdms.wearmanga.api;
 
+import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 import vip.cdms.wearmanga.utils.BiliCookieJar;
 
@@ -7,6 +8,7 @@ public class BiliAPI {
 
     /** 评论区类型代码 - */
     public static final int REPLY_TYPE_MANGA_MCID = 22;
+    public static final int REPLY_TYPE_MANGA_EPID = 29;
 
     /** 评论区排序方式 - 按时间 */
     public static final int REPLY_SORT_TIME = 0;
@@ -31,7 +33,7 @@ public class BiliAPI {
             Integer sort,
             Integer ps,
             Integer pn,
-            API.JsonDataCallback callback
+            API.JsonDataCallback<JSONObject> callback
     ) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .cookieJar(cookieJar)
@@ -47,7 +49,7 @@ public class BiliAPI {
         Request getRequest = new Request.Builder()
                 .url(httpUrlBuilder.build())
                 .build();
-        client.newCall(getRequest).enqueue(new API.OkhttpJsonDataCallback(callback));
+        client.newCall(getRequest).enqueue(new API.OkhttpJsonDataCallback<>(callback));
     }
 
     /**
@@ -66,7 +68,7 @@ public class BiliAPI {
             long root,
             Integer ps,
             Integer pn,
-            API.JsonDataCallback callback
+            API.JsonDataCallback<JSONObject> callback
     ) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .cookieJar(cookieJar)
@@ -82,7 +84,7 @@ public class BiliAPI {
         Request getRequest = new Request.Builder()
                 .url(httpUrlBuilder.build())
                 .build();
-        client.newCall(getRequest).enqueue(new API.OkhttpJsonDataCallback(callback));
+        client.newCall(getRequest).enqueue(new API.OkhttpJsonDataCallback<>(callback));
     }
 
     /**
@@ -99,7 +101,7 @@ public class BiliAPI {
             int oid,
             long rpid,
             boolean like,
-            API.JsonDataCallback callback
+            API.JsonDataCallback<JSONObject> callback
     ) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .cookieJar(cookieJar)
@@ -115,6 +117,6 @@ public class BiliAPI {
                 .url("https://api.bilibili.com/x/v2/reply/action")
                 .post(formBody)
                 .build();
-        client.newCall(postRequest).enqueue(new API.OkhttpJsonDataCallback(callback));
+        client.newCall(postRequest).enqueue(new API.OkhttpJsonDataCallback<>(callback));
     }
 }

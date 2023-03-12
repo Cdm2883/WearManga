@@ -2,10 +2,17 @@ package vip.cdms.wearmanga.utils;
 
 import android.content.Context;
 
-/**
- * dp转px | px转dp
- */
-public class DensityUtil {
+public class MathUtils {
+    /**
+     * 除法
+     * @param dividend 被除数
+     * @param divisor 除数
+     * @param accuracy 保留几位小数
+     */
+    public static double divide(int dividend, int divisor, int accuracy) {
+        return Math.round(dividend * Math.pow(10, accuracy) / divisor) / Math.pow(10.0, accuracy);
+    }
+
     /**
      * 根据手机的分辨率从 dp(相对大小) 的单位 转成为 px(像素)
      */

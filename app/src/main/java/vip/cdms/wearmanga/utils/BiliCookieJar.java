@@ -16,16 +16,12 @@ import static android.content.Context.MODE_PRIVATE;
  * Bili认证Cookie
  */
 public class BiliCookieJar implements CookieJar {
-    private final Context context;
-
     public final String DedeUserID;
     public final String DedeUserID__ckMd5;
     public final String SESSDATA;
     public final String bili_jct;
 
     public BiliCookieJar(Context context) {
-        this.context = context;
-
         SharedPreferences sharedPreferences = context.getSharedPreferences("bili", MODE_PRIVATE);
         DedeUserID = sharedPreferences.getString("DedeUserID", "");
         DedeUserID__ckMd5 = sharedPreferences.getString("DedeUserID__ckMd5", "");

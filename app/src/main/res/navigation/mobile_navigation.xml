@@ -12,9 +12,20 @@
             tools:layout="@layout/fragment_home"/>
 
     <fragment
+            android:id="@+id/nav_bookshelf"
+            android:name="vip.cdms.wearmanga.mainFragment.bookshelf.BookshelfFragment"
+            android:label="Bookshelf"
+            tools:layout="@layout/fragment_bookshelf"/>
+
+    <fragment
             android:id="@+id/nav_mine"
             android:name="vip.cdms.wearmanga.mainFragment.mine.MineFragment"
             android:label="Mine"
             tools:layout="@layout/fragment_mine"/>
+
+    <fragment
+            android:id="@+id/nav_settings"
+            android:name="vip.cdms.wearmanga.mainFragment.settings.SettingsFragment"
+            android:label="Settings"/>
 
 </navigation>

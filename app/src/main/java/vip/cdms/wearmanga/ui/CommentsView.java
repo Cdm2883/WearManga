@@ -29,9 +29,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.divider.MaterialDivider;
 import org.jetbrains.annotations.NotNull;
 import vip.cdms.wearmanga.R;
+import vip.cdms.wearmanga.utils.SettingsUtils;
+import vip.cdms.wearmanga.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
+import java.util.Objects;
 
 /**
  * 评论列表
@@ -92,6 +94,7 @@ public class CommentsView extends RecyclerView {
                 @NotNull RecyclerView.State state
         ) {
             super.getItemOffsets(outRect, view, parent, state);
+            if (Objects.requireNonNull(parent.getAdapter()).getItemViewType(parent.getChildAdapterPosition(view)) == CommentsViewAdapter.DataItem.TYPE_HEADER) return;
             if (
                     parent.getChildLayoutPosition(view) == (state.getItemCount() - 1)
             )
@@ -119,7 +122,7 @@ public class CommentsView extends RecyclerView {
 
         public static class DataItemHeader extends DataItem {
             private String title = null;
-            private String subtitle = null;
+            private CharSequence subtitle = null;
 
             private String more = null;
 
@@ -130,7 +133,7 @@ public class CommentsView extends RecyclerView {
                 TYPE = DataItem.TYPE_HEADER;
             }
 
-            public DataItemHeader header(String title, String subtitle) {
+            public DataItemHeader header(String title, CharSequence subtitle) {
                 this.title = title;
                 this.subtitle = subtitle;
                 return this;
@@ -145,7 +148,7 @@ public class CommentsView extends RecyclerView {
                 return title;
             }
 
-            public String getSubtitle() {
+            public CharSequence getSubtitle() {
                 return subtitle;
             }
 
@@ -435,12 +438,12 @@ public class CommentsView extends RecyclerView {
             }
         }
 
-        private boolean foundFirstDataItemComment = false;
+//        private boolean foundFirstDataItemComment = false;
         @Override
         public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
             DataItem dataItem = localDataSet.get(position);
 
-            if (position == 0) foundFirstDataItemComment = false;
+//            if (position == 0) foundFirstDataItemComment = false;
 
             if (
                     (viewHolder instanceof ViewHolderHeader)
@@ -451,11 +454,13 @@ public class CommentsView extends RecyclerView {
 
                 if (dataItemHeader.getTitle() != null) {
                     viewHolderHeader.getHeader().setVisibility(VISIBLE);
+                    viewHolderHeader.getMore().setVisibility(GONE);
                     viewHolderHeader.getHeaderTitle().setText(dataItemHeader .getTitle());
                     if (dataItemHeader.getSubtitle() == null) viewHolderHeader.getHeaderSubtitle().setVisibility(GONE);
                     else viewHolderHeader.getHeaderSubtitle().setText(dataItemHeader.getSubtitle());
                 } else if (dataItemHeader.getMore() != null) {
                     viewHolderHeader.getMore().setVisibility(VISIBLE);
+                    viewHolderHeader.getHeader().setVisibility(GONE);
                     viewHolderHeader.getMoreText().setText(dataItemHeader.getMore());
                 }
 
@@ -469,20 +474,27 @@ public class CommentsView extends RecyclerView {
                 ViewHolderComment viewHolderComment = (ViewHolderComment) viewHolder;
                 DataItemComment dataItemComment = (DataItemComment) dataItem;
 
-                if (!foundFirstDataItemComment) {
-                    foundFirstDataItemComment = true;
-                    viewHolderComment.getDivider().setVisibility(GONE);
-                }
+//                if (!foundFirstDataItemComment) {
+//                    foundFirstDataItemComment = true;
+//                    viewHolderComment.getDivider().setVisibility(GONE);
+//                } else {
+//                    viewHolderComment.getDivider().setVisibility(VISIBLE);
+//                }
+                viewHolderComment.getDivider().setVisibility(
+                        (position == 0 || getItemViewType(position - 1) == DataItem.TYPE_HEADER) ?
+                                GONE
+                                :
+                                VISIBLE
+                );
 
                 viewHolderComment.getAvatar().post(() -> {
+                    double imageSize = SettingsUtils.getInt("image_size", 100) * 0.01;
                     String avatarUrl = dataItemComment.getAvatarUrl();
-                    if (Pattern.compile(
-                            "^*.hdslb.com/bfs/.+/.+\\..*$"
-                    ).matcher(avatarUrl).matches()) avatarUrl = avatarUrl + "@300w_300h";
+                    avatarUrl = StringUtils.biliImageUrl(avatarUrl, 300, 300);
                     Glide.with(viewHolderComment.getView())
                             .setDefaultRequestOptions(new RequestOptions()
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .override(viewHolderComment.getAvatar().getWidth(), viewHolderComment.getAvatar().getHeight())
+                                    .override((int) (300 * imageSize), (int) (300 * imageSize))
                                     .format(DecodeFormat.PREFER_RGB_565))
                             .load(avatarUrl)
                             .placeholder(R.drawable.baseline_account_circle_24)
@@ -502,9 +514,11 @@ public class CommentsView extends RecyclerView {
                     return;
                 }
                 viewHolderComment.getLikeIcon().setImageResource(dataItemComment.isLiked() ? R.drawable.baseline_thumb_up_24 : R.drawable.outline_thumb_up_24);
+                viewHolderComment.getLikeIcon().setImageTintMode(PorterDuff.Mode.SRC_ATOP);
                 if (dataItemComment.isLiked()) {
-                    viewHolderComment.getLikeIcon().setImageTintMode(PorterDuff.Mode.SRC_ATOP);
                     viewHolderComment.getLikeIcon().setImageTintList(ContextCompat.getColorStateList(commentsView.getContext(), R.color.fav_fab_yes));
+                } else {
+                    viewHolderComment.getLikeIcon().setImageTintList(ContextCompat.getColorStateList(commentsView.getContext(), R.color.icon));
                 }
                 viewHolderComment.getLikeCount().setText(dataItemComment.getLikeCount());
                 DataItemComment.LikeClickListener likeClickListener = dataItemComment.getLikeClickListener();
@@ -560,14 +574,14 @@ public class CommentsView extends RecyclerView {
                 DataItemCommentChild dataItemCommentChild = (DataItemCommentChild) dataItem;
 
                 viewHolderCommentChild.getAvatar().post(() -> {
+                    double imageSize = SettingsUtils.getInt("image_size", 100) * 0.01;
                     String avatarUrl = dataItemCommentChild.getAvatarUrl();
-                    if (Pattern.compile(
-                            "^*.hdslb.com/bfs/.+/.+\\..*$"
-                    ).matcher(avatarUrl).matches()) avatarUrl = avatarUrl + "@300w_300h";
+                    avatarUrl = StringUtils.biliImageUrl(avatarUrl, 300, 300);
                     Glide.with(viewHolderCommentChild.getView())
                             .setDefaultRequestOptions(new RequestOptions()
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .override(viewHolderCommentChild.getAvatar().getWidth(), viewHolderCommentChild.getAvatar().getHeight())
+//                                    .override(viewHolderCommentChild.getAvatar().getWidth(), viewHolderCommentChild.getAvatar().getHeight())
+                                    .override((int) (300 * imageSize), (int) (300 * imageSize))
                                     .format(DecodeFormat.PREFER_RGB_565))
                             .load(avatarUrl)
                             .placeholder(R.drawable.baseline_account_circle_24)
@@ -588,9 +602,11 @@ public class CommentsView extends RecyclerView {
                     return;
                 }
                 viewHolderCommentChild.getLikeIcon().setImageResource(dataItemCommentChild.isLiked() ? R.drawable.baseline_thumb_up_24 : R.drawable.outline_thumb_up_24);
+                viewHolderCommentChild.getLikeIcon().setImageTintMode(PorterDuff.Mode.SRC_ATOP);
                 if (dataItemCommentChild.isLiked()) {
-                    viewHolderCommentChild.getLikeIcon().setImageTintMode(PorterDuff.Mode.SRC_ATOP);
                     viewHolderCommentChild.getLikeIcon().setImageTintList(ContextCompat.getColorStateList(commentsView.getContext(), R.color.fav_fab_yes));
+                } else {
+                    viewHolderCommentChild.getLikeIcon().setImageTintList(ContextCompat.getColorStateList(commentsView.getContext(), R.color.icon));
                 }
                 viewHolderCommentChild.getLikeCount().setText(dataItemCommentChild.getLikeCount());
                 DataItemComment.LikeClickListener likeClickListener = dataItemCommentChild.getLikeClickListener();

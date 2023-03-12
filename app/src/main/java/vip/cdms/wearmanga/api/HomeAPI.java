@@ -1,10 +1,11 @@
 package vip.cdms.wearmanga.api;
 
+import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 
 public class HomeAPI {
     // 为你推荐
-    public static void HomeRecommend(CookieJar cookieJar, API.JsonDataCallback callback) {
+    public static void HomeRecommend(CookieJar cookieJar, API.JsonDataCallback<JSONObject> callback) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .cookieJar(cookieJar)
                 .build();
@@ -18,11 +19,11 @@ public class HomeAPI {
                 .url("https://manga.bilibili.com/twirp/comic.v1.Comic/HomeRecommend?device=pc&platform=web")
                 .post(requestBody)
                 .build();
-        client.newCall(postRequest).enqueue(new API.OkhttpJsonDataCallback(callback));
+        client.newCall(postRequest).enqueue(new API.OkhttpJsonDataCallback<>(callback));
     }
 
     // ？？？ 热门tabId: 271
-    public static void GetClassPageLayout(int tab_id, CookieJar cookieJar, API.JsonDataCallback callback) {
+    public static void GetClassPageLayout(int tab_id, CookieJar cookieJar, API.JsonDataCallback<JSONObject> callback) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .cookieJar(cookieJar)
                 .build();
@@ -35,10 +36,10 @@ public class HomeAPI {
                 .url("https://manga.bilibili.com/twirp/comic.v1.Comic/GetClassPageLayout?device=pc&platform=web")
                 .post(requestBody)
                 .build();
-        client.newCall(postRequest).enqueue(new API.OkhttpJsonDataCallback(callback));
+        client.newCall(postRequest).enqueue(new API.OkhttpJsonDataCallback<>(callback));
     }
     // 和上面那个连用
-    public static void GetClassPageSixComics(int id, int page_num, int page_size, CookieJar cookieJar, API.JsonDataCallback callback) {
+    public static void GetClassPageSixComics(int id, int page_num, int page_size, CookieJar cookieJar, API.JsonDataCallback<JSONObject> callback) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .cookieJar(cookieJar)
                 .build();
@@ -54,6 +55,6 @@ public class HomeAPI {
                 .url("https://manga.bilibili.com/twirp/comic.v1.Comic/GetClassPageSixComics?device=pc&platform=web")
                 .post(requestBody)
                 .build();
-        client.newCall(postRequest).enqueue(new API.OkhttpJsonDataCallback(callback));
+        client.newCall(postRequest).enqueue(new API.OkhttpJsonDataCallback<>(callback));
     }
 }

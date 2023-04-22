@@ -61,6 +61,7 @@ dependencies {
     implementation 'com.google.zxing:javase:3.1.0'
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    //noinspection GradleDependency
     implementation 'com.alibaba:fastjson:1.2.83_noneautotype'
 
     testImplementation 'junit:junit:4.13.2'

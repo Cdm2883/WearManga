@@ -512,7 +512,7 @@ public class CommentsView extends RecyclerView {
                 if (dataItemComment.getLikeCount() == null) {
                     viewHolderComment.getLikeLayout().setVisibility(GONE);
                     return;
-                }
+                } else viewHolderComment.getLikeLayout().setVisibility(VISIBLE);
                 viewHolderComment.getLikeIcon().setImageResource(dataItemComment.isLiked() ? R.drawable.baseline_thumb_up_24 : R.drawable.outline_thumb_up_24);
                 viewHolderComment.getLikeIcon().setImageTintMode(PorterDuff.Mode.SRC_ATOP);
                 if (dataItemComment.isLiked()) {
@@ -600,7 +600,7 @@ public class CommentsView extends RecyclerView {
                 if (dataItemCommentChild.getLikeCount() == null) {
                     viewHolderCommentChild.getLikeLayout().setVisibility(GONE);
                     return;
-                }
+                } else viewHolderCommentChild.getLikeLayout().setVisibility(VISIBLE);
                 viewHolderCommentChild.getLikeIcon().setImageResource(dataItemCommentChild.isLiked() ? R.drawable.baseline_thumb_up_24 : R.drawable.outline_thumb_up_24);
                 viewHolderCommentChild.getLikeIcon().setImageTintMode(PorterDuff.Mode.SRC_ATOP);
                 if (dataItemCommentChild.isLiked()) {

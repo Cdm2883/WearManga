@@ -48,6 +48,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="#fff"
+                        android:maxLines="2"
                         android:textAppearance="?attr/textAppearanceHeadline6"/>
 <!--                android:text="title"-->
 

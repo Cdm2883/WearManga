@@ -54,6 +54,10 @@ dependencies {
     implementation(libs.androidx.wear.compose.material)
     implementation(libs.androidx.activity.compose)
     //
+    implementation(libs.google.android.horologist.composables)
+    implementation(libs.google.android.horologist.compose.layout)
+    implementation(libs.google.android.horologist.compose.material)
+    //
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.wear.tooling.preview)
     androidTestImplementation(composeBom)

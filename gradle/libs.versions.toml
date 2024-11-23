@@ -7,8 +7,8 @@ androidx-compose-bom = "2024.11.00"
 androidx-wear-compose-material = "1.4.0"
 androidx-wear-compose-foundation = "1.4.0"
 androidx-wear-tooling-preview = "1.0.0"
-
 androidx-activity-compose = "1.9.3"
+google-android-horologist = "0.7.5-alpha"
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
@@ -21,6 +21,10 @@ androidx-wear-compose-material = { module = "androidx.wear.compose:compose-mater
 androidx-wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose-foundation" }
 androidx-wear-tooling-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "androidx-wear-tooling-preview" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
+
+google-android-horologist-composables = { module = "com.google.android.horologist:horologist-composables", version.ref = "google-android-horologist" }
+google-android-horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "google-android-horologist" }
+google-android-horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "google-android-horologist" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

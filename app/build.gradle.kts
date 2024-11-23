@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace = "vip.cdms.wearmanga"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "vip.cdms.wearmanga"
-        minSdk = 25
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -51,8 +51,10 @@ dependencies {
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.wear.compose.foundation)
-    implementation(libs.androidx.wear.compose.material)
+    implementation(libs.androidx.wear.compose.material.core)
+    implementation(libs.androidx.wear.compose.material3)
     implementation(libs.androidx.activity.compose)
     //
     implementation(libs.google.android.horologist.composables)

@@ -12,9 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.TimeText
 import androidx.wear.tooling.preview.devices.WearDevices
 import vip.cdms.wearmanga.ui.theme.WearMangaTheme
 
@@ -33,7 +33,7 @@ fun WearApp(greetingName: String) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background),
+                .background(MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
         ) {
             TimeText()
@@ -47,7 +47,7 @@ fun Greeting(greetingName: String) {
     Text(
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
+        color = MaterialTheme.colorScheme.primary,
         text = greetingName
     )
 }

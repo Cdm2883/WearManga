@@ -7,6 +7,7 @@ androidx-compose-bom = "2024.11.00"
 androidx-wear-compose-foundation = "1.4.0"
 androidx-wear-compose-material-core = "1.4.0"
 androidx-wear-compose-material3 = "1.0.0-alpha29"
+androidx-wear-compose-material = "1.4.0"
 androidx-wear-tooling-preview = "1.0.0"
 androidx-activity-compose = "1.9.3"
 google-android-horologist = "0.7.5-alpha"
@@ -24,6 +25,7 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose-foundation" }
 androidx-wear-compose-material-core = { module = "androidx.wear.compose:compose-material-core", version.ref = "androidx-wear-compose-material-core" }
 androidx-wear-compose-material3 = { module = "androidx.wear.compose:compose-material3", version.ref = "androidx-wear-compose-material3" }
+androidx-wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose-material" }
 androidx-wear-tooling-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "androidx-wear-tooling-preview" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
 

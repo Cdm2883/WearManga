@@ -16,14 +16,17 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.tooling.preview.devices.WearDevices
-import vip.cdms.wearmanga.ui.theme.WearMangaTheme
+import vip.cdms.wearmanga.ui.AppNavigation
 import vip.cdms.wearmanga.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WearApp("Android")
+            AppTheme {
+                AppNavigation()
+            }
+//            WearApp("Android")
         }
     }
 }

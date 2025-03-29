@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -47,16 +48,16 @@ android {
 }
 
 dependencies {
-    // compose
+    // compose components
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.wear.compose.foundation)
     implementation(libs.androidx.wear.compose.material.core)
-    implementation(libs.androidx.wear.compose.material3)
     implementation(libs.androidx.wear.compose.material)
-    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.wear.compose.navigation)
     //
     implementation(libs.google.android.horologist.composables)
     implementation(libs.google.android.horologist.compose.layout)
@@ -68,6 +69,13 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    //
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.square.retrofit2)
 
     coreLibraryDesugaring(libs.android.tools.desugar.jdk.libs)
 }

@@ -1,31 +1,35 @@
 [versions]
 #noinspection AndroidGradlePluginVersion
 android-gradle-plugin = "8.6.0-alpha07"
-kotlin = "2.0.21"
+kotlin = "2.1.10"
+kotlinx-serialization = "1.7.3"
 
-androidx-compose-bom = "2024.11.00"
-androidx-wear-compose-foundation = "1.4.0"
-androidx-wear-compose-material-core = "1.4.0"
-androidx-wear-compose-material3 = "1.0.0-alpha29"
-androidx-wear-compose-material = "1.4.0"
+androidx-compose-bom = "2025.03.01"
+androidx-wear-compose-foundation = "1.4.1"
+androidx-wear-compose-material-core = "1.4.1"
+androidx-wear-compose-material = "1.4.1"
+androidx-wear-compose-navigation = "1.4.1"
 androidx-wear-tooling-preview = "1.0.0"
-androidx-activity-compose = "1.9.3"
+androidx-activity-compose = "1.10.1"
 google-android-horologist = "0.7.5-alpha"
-
-android-tools-desugar-jdk-libs = "2.1.3"
+androidx-navigation-compose = "2.8.9"
+androidx-lifecycle-viewmodel-compose = "2.8.7"
+square-retrofit2 = "2.11.0"
+android-tools-desugar-jdk-libs = "2.1.5"
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "androidx-wear-compose-foundation" }
 androidx-wear-compose-material-core = { module = "androidx.wear.compose:compose-material-core", version.ref = "androidx-wear-compose-material-core" }
-androidx-wear-compose-material3 = { module = "androidx.wear.compose:compose-material3", version.ref = "androidx-wear-compose-material3" }
 androidx-wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "androidx-wear-compose-material" }
+androidx-wear-compose-navigation = { module = "androidx.wear.compose:compose-navigation", version.ref = "androidx-wear-compose-navigation" }
 androidx-wear-tooling-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "androidx-wear-tooling-preview" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
 
@@ -33,9 +37,16 @@ google-android-horologist-composables = { module = "com.google.android.horologis
 google-android-horologist-compose-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "google-android-horologist" }
 google-android-horologist-compose-material = { module = "com.google.android.horologist:horologist-compose-material", version.ref = "google-android-horologist" }
 
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation-compose" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle-viewmodel-compose" }
+
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+square-retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "square-retrofit2" }
+
 android-tools-desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-tools-desugar-jdk-libs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
